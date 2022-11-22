@@ -1,0 +1,197 @@
+FindFirstChild, FindFirstChildOfClass, FindFirstChild, WaitForChild = game.FindFirstChild,game.FindFirstChildOfClass,game.FindFirstChild,game.WaitForChild
+
+GetService = game.GetService
+
+LocalPlayer = game.Players.LocalPlayer
+Destroy, Clone = game.Destroy, game.Clone
+Connection = game.Loaded
+CWait = Connection.Wait
+
+InstanceNew = Instance.new
+CFrameNew = CFrame.new
+Vector3New = Vector3.new
+
+Services = {
+	Players = GetService(game, "Players");
+    Workspace = GetService(game, "Workspace");
+    UserInputService = GetService(game, "UserInputService");
+    ReplicatedStorage = GetService(game, "ReplicatedStorage");
+    StarterPlayer = GetService(game, "StarterPlayer");
+    StarterPack = GetService(game, "StarterPack");
+    StarterGui = GetService(game, "StarterGui");
+    TeleportService = GetService(game, "TeleportService");
+    CoreGui = GetService(game, "CoreGui");
+    TweenService = GetService(game, "TweenService");
+    HttpService = GetService(game, "HttpService");
+    TextService = GetService(game, "TextService");
+    MarketplaceService = GetService(game, "MarketplaceService");
+    Chat = GetService(game, "Chat");
+    Teams = GetService(game, "Teams");
+    SoundService = GetService(game, "SoundService");
+    Lighting = GetService(game, "Lighting");
+    ScriptContext = GetService(game, "ScriptContext");
+    Stats = GetService(game, "Stats");
+}
+
+GetPlayers = Services.Players.GetPlayers
+
+SpoofedInstances = setmetatable({}, {
+    __mode = "v"
+});
+
+SpoofInstance = function(Instance_, Instance2)
+    if (not SpoofedInstances[Instance_]) then
+        SpoofedInstances[Instance_] = Instance2 and Instance2 or Clone(Instance_);
+    end
+end
+
+GetCharacter = function(Plr)
+    return Plr and Plr.Character or LocalPlayer.Character
+end
+
+GetRoot = function(Plr, Char)
+    local LCharacter = GetCharacter();
+    local Character = Char or GetCharacter(Plr);
+    return Plr and Character and (FindFirstChild(Character, "HumanoidRootPart") or FindFirstChild(Character, "Torso") or FindFirstChild(Character, "UpperTorso")) or LCharacter and (FindFirstChild(LCharacter, "HumanoidRootPart") or FindFirstChild(LCharacter, "Torso") or FindFirstChild(LCharacter, "UpperTorso"));
+end
+
+GetHumanoid = function(Plr, Char)
+    local LCharacter = GetCharacter();
+    local Character = Char or GetCharacter(Plr);
+    return Plr and Character and FindFirstChild(Character, "Humanoid") or LCharacter and FindFirstChild(LCharacter, "Humanoid");
+end
+
+ReplaceHumanoid = function(Hum, R)
+    local Humanoid = Hum or GetHumanoid();
+    local NewHumanoid = Clone(Humanoid);
+    if (R) then
+        NewHumanoid.Name = "1"
+    end
+    NewHumanoid.Parent = Humanoid.Parent
+    NewHumanoid.Name = Humanoid.Name
+    Services.Workspace.Camera.CameraSubject = NewHumanoid
+    Destroy(Humanoid);
+    SpoofInstance(NewHumanoid);
+    return NewHumanoid
+end
+
+ReplaceCharacter = function()
+    local Char = LocalPlayer.Character
+    local Model = InstanceNew("Model");
+    LocalPlayer.Character = Model
+    LocalPlayer.Character = Char
+    Destroy(Model);
+    return Char
+end
+
+CFrameTool = function(tool, pos)
+    local RightArm = FindFirstChild(GetCharacter(), "RightLowerArm") or FindFirstChild(GetCharacter(), "Right Arm");
+    local Arm = RightArm.CFrame * CFrameNew(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -1, 0);
+    local Frame = Inverse(toObjectSpace(Arm, pos));
+
+    tool.Grip = Frame
+end
+
+Sanitize = function(value)
+    if typeof(value) == 'CFrame' then
+        local components = {components(value)}
+        for i,v in pairs(components) do
+            components[i] = floor(v * 10000 + .5) / 10000
+        end
+        return 'CFrame.new('..concat(components, ', ')..')'
+    end
+end
+
+AddPlayerConnection = function(Player, Connection, CEnv)
+    if (CEnv) then
+        CEnv[#CEnv + 1] = Connection
+    else
+        Connections.Players[Player.Name].Connections[#Connections.Players[Player.Name].Connections + 1] = Connection
+    end
+    return Connection
+end
+
+FindTool = function(Plr, Name)
+	local tool = Plr.Backpack:FindFirstChild(Name)
+	if not tool then
+		tool = GetCharacter(Plr):FindFirstChild(Name)
+	end
+	return tool
+end
+
+getPlr = function(str)
+    for i,v in pairs(GetPlayers(Services.Players)) do
+        if v.Name:lower():match(str) or v.DisplayName:lower():match(str) then
+            return v
+        end
+    end
+end
+
+suicide = function()
+	for i,v in pairs(GetPlayers(Services.Players)) do
+		if v.Name ~= LocalPlayer.Name then
+			local gun = FindTool(v, "pistol")
+			if gun then
+				gun.RemoteEvent:FireServer(GetHumanoid(v)) 
+			end
+		end
+	end
+end
+
+suicide_wof = function()
+	for i,v in pairs(GetPlayers(Services.Players)) do
+		if v.Name ~= LocalPlayer.Name and not v:IsFriendsWith(LocalPlayer.UserId) then
+			local gun = FindTool(v, "pistol")
+			if gun then
+				gun.RemoteEvent:FireServer(GetHumanoid(v))
+			end
+		end
+	end
+end
+
+shootgun = function()
+	for i,v in pairs(GetPlayers(Services.Players)) do
+		local gun = FindTool(v, "pistol")
+		if gun then
+			local target
+			repeat
+				target = GetPlayers(Services.Players)[math.random(1, #GetPlayers(Services.Players))] 
+			until target.Name ~= LocalPlayer.Name
+			gun.RemoteEvent:FireServer(GetHumanoid(target))
+		end
+	end
+end
+
+shootgun_wof = function()
+	for i,v in pairs(GetPlayers(Services.Players)) do
+		local gun = FindTool(v, "pistol")
+		if gun then
+			local target
+			repeat
+				target = GetPlayers(Services.Players)[math.random(1, #GetPlayers(Services.Players))] 
+			until target.Name ~= LocalPlayer.Name and not target:IsFriendsWith(LocalPlayer.UserId)
+			gun.RemoteEvent:FireServer(GetHumanoid(target))
+		end
+	end
+end
+
+giver_radio = function(Name, val)
+	local OldPos = GetRoot().CFrame
+	local target = Services.Players[Name]
+	local tool = FindTool(LocalPlayer, "radio")
+	local CHUM = GetHumanoid():Clone()
+	GetHumanoid():UnequipTools()
+	GetCharacter().Animate.Disabled = true
+	Destroy(GetHumanoid())
+	CHUM.Parent = GetCharacter()
+	tool.Parent = GetCharacter()
+	if val then
+		tool.Handle.Mesh:Destroy()
+	end
+	firetouchinterest(GetRoot(target), tool.Handle, 0)
+	task.wait(.5)
+	LocalPlayer.Character:Destroy()
+	Services.Workspace:WaitForChild(LocalPlayer.Name)
+	GetCharacter():WaitForChild("Humanoid")
+	GetRoot().CFrame = OldPos
+end
