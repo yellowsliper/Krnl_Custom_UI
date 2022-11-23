@@ -50,13 +50,13 @@ lcplr:Slider{
     end
 }
 
-to_plr_menu = tool:Dropdown{
-    Name = "Radio Giver",
+to_plr_menu = lcplr:Dropdown{
+    Name = "Teleport Menu",
     StartingText = "Select...",
-    Description = "You can give radio other player",
+    Description = "Change your CFrame to target CFrame",
     Items = plrs,
     Callback = function(text)
-        local target = getPlr(string.split(text, " ")[1])
+        local target = Services.Players[string.split(text, " ")[3]]
         GetRoot().CFrame = GetRoot(target).CFrame
     end
 }
