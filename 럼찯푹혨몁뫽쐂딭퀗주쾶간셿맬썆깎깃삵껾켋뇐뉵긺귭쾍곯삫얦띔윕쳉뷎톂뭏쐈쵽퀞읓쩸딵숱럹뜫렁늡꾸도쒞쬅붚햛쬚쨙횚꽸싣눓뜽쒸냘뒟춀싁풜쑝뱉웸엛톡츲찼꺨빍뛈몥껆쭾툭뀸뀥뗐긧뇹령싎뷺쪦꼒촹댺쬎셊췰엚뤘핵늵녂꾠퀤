@@ -1,0 +1,9 @@
+local animation = GUI:Tab{
+    Name = "Animations",
+    Icon = "rbxassetid://1043079590"
+}
+
+animation:Label{
+    Text = "추가 예정",
+    Description = "Coming soon"
+}
