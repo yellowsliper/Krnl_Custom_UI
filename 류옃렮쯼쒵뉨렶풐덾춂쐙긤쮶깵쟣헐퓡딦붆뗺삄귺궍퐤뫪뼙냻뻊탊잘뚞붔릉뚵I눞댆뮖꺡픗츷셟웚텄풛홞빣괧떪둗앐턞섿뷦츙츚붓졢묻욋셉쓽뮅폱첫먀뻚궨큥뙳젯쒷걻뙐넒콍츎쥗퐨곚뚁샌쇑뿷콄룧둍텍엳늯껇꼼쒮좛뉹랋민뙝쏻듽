@@ -49,3 +49,14 @@ lcplr:Slider{
         GetHumanoid().JumpPower = value
     end
 }
+
+to_plr_menu = tool:Dropdown{
+    Name = "Radio Giver",
+    StartingText = "Select...",
+    Description = "You can give radio other player",
+    Items = plrs,
+    Callback = function(text)
+        local target = getPlr(string.split(text, " ")[1])
+        GetRoot().CFrame = GetRoot(target).CFrame
+    end
+}
