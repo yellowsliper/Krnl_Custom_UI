@@ -1,0 +1,51 @@
+local lcplr = GUI:Tab{
+    Name = "LocalPlayer",
+    Icon = "rbxassetid://2795572800"
+}
+
+lcplr:Button{
+    Name = "Reset Character",
+    Description = "Reset your character",
+    Callback = function()
+        ReplaceCharacter();
+        wait(Services.Players.RespawnTime - 0.03);
+        local OldPos = GetRoot().CFrame
+        ReplaceHumanoid()
+        CWait(LocalPlayer.CharacterAdded)
+        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
+    end
+}
+
+lcplr:Button{
+    Name = "Rejoin",
+    Description = "Rejoin this server",
+    Callback = function()
+        local TeleportService = Services.TeleportService
+        if (#GetPlayers(Services.Players) == 1) then
+            LocalPlayer:Kick();
+            TeleportService.Teleport(TeleportService, game.PlaceId);
+        else
+            TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId)
+        end
+    end
+}
+
+lcplr:Slider{
+	Name = "Walk Speed",
+	Default = GetHumanoid().WalkSpeed,
+	Min = 0,
+	Max = 500,
+	Callback = function(value)
+        GetHumanoid().WalkSpeed = value
+    end
+}
+
+lcplr:Slider{
+	Name = "Jump Power",
+	Default = GetHumanoid().JumpPower,
+	Min = 0,
+	Max = 500,
+	Callback = function(value)
+        GetHumanoid().JumpPower = value
+    end
+}
