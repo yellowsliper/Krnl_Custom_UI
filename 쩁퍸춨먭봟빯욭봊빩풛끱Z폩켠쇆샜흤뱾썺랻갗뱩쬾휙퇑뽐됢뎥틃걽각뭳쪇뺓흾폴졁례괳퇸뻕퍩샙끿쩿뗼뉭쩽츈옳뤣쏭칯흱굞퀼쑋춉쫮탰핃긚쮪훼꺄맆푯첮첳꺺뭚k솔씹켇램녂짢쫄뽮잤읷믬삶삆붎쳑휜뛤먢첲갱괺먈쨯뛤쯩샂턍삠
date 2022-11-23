@@ -93,12 +93,14 @@ combat:Toggle{
     end
 }
 
-combat:Textbox{
+kill_plr_menu = combat:Dropdown{
     Name = "Kill Player (Gun)",
+    StartingText = "Select...",
     Description = "Need gun",
+    Items = plrs,
     Callback = function(text)
+        local target = Services.Players[string.split(text, " ")[3]]
         local gun = FindTool(LocalPlayer, "pistol")
-        local target = getPlr(text)
         if gun and target then
             gun.RemoteEvent:FireServer(GetHumanoid(target))
         end
