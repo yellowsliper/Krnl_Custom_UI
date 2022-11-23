@@ -1,3 +1,8 @@
+local tool = GUI:Tab{
+    Name = "Tools",
+    Icon = "rbxassetid://6767454852"
+}
+
 tool:Button{
     Name = "Drop Tools",
     Description = "Drop all tools",
