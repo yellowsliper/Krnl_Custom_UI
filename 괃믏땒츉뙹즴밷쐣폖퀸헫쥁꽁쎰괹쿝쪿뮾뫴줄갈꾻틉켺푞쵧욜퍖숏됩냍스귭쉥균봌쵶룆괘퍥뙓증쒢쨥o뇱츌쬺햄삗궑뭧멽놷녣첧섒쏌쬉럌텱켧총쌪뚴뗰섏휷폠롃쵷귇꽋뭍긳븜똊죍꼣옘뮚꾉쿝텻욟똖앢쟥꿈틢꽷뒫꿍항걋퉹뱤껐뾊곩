@@ -102,7 +102,7 @@ tool:Toggle{
     end
 }
 
-local give_radio = tool:Dropdown{
+give_radio_menu = tool:Dropdown{
     Name = "Radio Giver",
     StartingText = "Select...",
     Description = "You can give radio other player",
@@ -124,3 +124,4 @@ local give_radio = tool:Dropdown{
         LocalPlayer.Character = nil
     end
 }
+
